@@ -9,6 +9,7 @@
 | `photobackup-linux-amd64.tar.gz` | x86_64 |
 | `photobackup-linux-arm64.tar.gz` | ARM64（树莓派 4/5 64 位等） |
 | `photobackup-linux-armv7.tar.gz` | ARMv7（部分 32 位板卡） |
+| `install.sh` / `install-pi.sh` | 一键安装脚本 |
 | `SHA256SUMS` | 校验和 |
 
 解压后目录结构：
@@ -35,26 +36,47 @@ systemd 服务名：`photobackup`
 在目标 Linux 机器上执行（需 root / sudo）：
 
 ```bash
-# 从本仓库 Release 拉取对应架构包并安装
-RELEASE_BASE_URL=https://github.com/gaowei1012/photo-backup-system/releases/latest/download \
-  wget -qO- https://raw.githubusercontent.com/ouistudio/photo-backup-system/master/scripts/install.sh | bash
+# 通用 Linux（脚本与发布包均来自本仓库）
+curl -fsSL -o install.sh \
+  https://raw.githubusercontent.com/gaowei1012/photo-backup-system/main/install.sh
+sudo bash install.sh
 ```
 
-树莓派可用：
+树莓派：
 
 ```bash
-RELEASE_BASE_URL=https://github.com/gaowei1012/photo-backup-system/releases/latest/download \
-  wget -qO- https://raw.githubusercontent.com/ouistudio/photo-backup-system/master/scripts/install-pi.sh | bash
+curl -fsSL -o install-pi.sh \
+  https://raw.githubusercontent.com/gaowei1012/photo-backup-system/main/install-pi.sh
+sudo bash install-pi.sh
 ```
 
 指定某个包地址：
 
 ```bash
 TARBALL_URL=https://github.com/gaowei1012/photo-backup-system/releases/download/v1.0.0/photobackup-linux-arm64.tar.gz \
-  bash install.sh
+  sudo bash install.sh
 ```
 
+若 GitHub raw 仍不稳定，可从本机拷贝脚本到服务器后再执行（见下方「离线安装」）。
+
+> 注意：源码在私有 GitLab，**不要**再使用 `raw.githubusercontent.com/ouistudio/...`（会 404）。
+
 安装脚本会：检测架构 → 安装依赖（MySQL/MariaDB、ffmpeg 等）→ 解压到 `/opt/photobackup` → 生成 `.env` → 注册并启动 systemd。
+
+### 离线安装（推荐，国内网络）
+
+在能访问本仓库的电脑上，把脚本和对应架构包拷到服务器：
+
+```bash
+# 本机（有 dist 目录时）
+scp install.sh photobackup-linux-amd64.tar.gz user@服务器:/tmp/
+
+# 服务器上
+cd /tmp
+TARBALL_URL=file:///tmp/photobackup-linux-amd64.tar.gz sudo bash install.sh
+```
+
+树莓派把包名换成 `photobackup-linux-arm64.tar.gz`（或 armv7）。
 
 常用环境变量：
 

@@ -55,6 +55,8 @@ jobs:
             photobackup-linux-amd64.tar.gz
             photobackup-linux-arm64.tar.gz
             photobackup-linux-armv7.tar.gz
+            install.sh
+            install-pi.sh
             SHA256SUMS
           generate_release_notes: true
           fail_on_unmatched_files: true
