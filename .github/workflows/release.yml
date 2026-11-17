@@ -1,0 +1,60 @@
+name: Publish release packages
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "要发布的 tag（如 v1.0.0）；留空则使用当前触发的 ref"
+        required: false
+        default: ""
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Resolve tag
+        id: meta
+        run: |
+          if [ -n "${{ inputs.tag }}" ]; then
+            TAG="${{ inputs.tag }}"
+          else
+            TAG="${GITHUB_REF_NAME}"
+          fi
+          echo "tag=${TAG}" >> "$GITHUB_OUTPUT"
+          echo "Publishing tag: ${TAG}"
+
+      - name: Verify release assets
+        run: |
+          set -euo pipefail
+          test -f SHA256SUMS
+          test -f photobackup-linux-amd64.tar.gz
+          test -f photobackup-linux-arm64.tar.gz
+          test -f photobackup-linux-armv7.tar.gz
+          echo "Assets:"
+          ls -lh photobackup-linux-*.tar.gz SHA256SUMS
+          echo
+          echo "SHA256SUMS:"
+          cat SHA256SUMS
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.meta.outputs.tag }}
+          name: ${{ steps.meta.outputs.tag }}
+          files: |
+            photobackup-linux-amd64.tar.gz
+            photobackup-linux-arm64.tar.gz
+            photobackup-linux-armv7.tar.gz
+            SHA256SUMS
+          generate_release_notes: true
+          fail_on_unmatched_files: true
