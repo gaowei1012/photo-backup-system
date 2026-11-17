@@ -2,23 +2,24 @@
 # Photo Backup System 一键安装（原生二进制 + systemd，不依赖 Docker）
 # 支持：Linux x86_64 / arm64 / armv7（含树莓派）
 #
-# 用法：
-#   curl -fsSL -o install.sh https://raw.githubusercontent.com/gaowei1012/photo-backup-system/main/install.sh
+# 用法（国内推荐 jsDelivr，直连 GitHub 常超时无输出）：
+#   curl -fsSL -o install.sh https://cdn.jsdelivr.net/gh/gaowei1012/photo-backup-system@main/install.sh
 #   sudo bash install.sh
 #
 # 环境变量：
 #   INSTALL_DIR=/opt/photobackup
 #   APP_PORT=13400
-#   RELEASE_BASE_URL=https://github.com/gaowei1012/photo-backup-system/releases/latest/download
-#   VERSION=latest          # 或 v1.0.0（配合 RELEASE_BASE_URL 指向具体 tag）
-#   TARBALL_URL=            # 直接指定包地址，优先级最高
-#   SKIP_DEPS=0             # 1=不装系统依赖（需已有 mysql/mariadb/ffmpeg）
-#   WITH_MYSQL=1            # 0=跳过本机 MySQL/MariaDB（使用已有远程库）
+#   RELEASE_BASE_URL=   # 包下载前缀（默认 jsDelivr，见下方）
+#   TARBALL_URL=        # 直接指定包地址，优先级最高
+#   SKIP_DEPS=0         # 1=不装系统依赖（需已有 mysql/mariadb/ffmpeg）
+#   WITH_MYSQL=1        # 0=跳过本机 MySQL/MariaDB（使用已有远程库）
 set -euo pipefail
 
 INSTALL_DIR="${INSTALL_DIR:-/opt/photobackup}"
 APP_PORT="${APP_PORT:-13400}"
-RELEASE_BASE_URL="${RELEASE_BASE_URL:-https://github.com/gaowei1012/photo-backup-system/releases/latest/download}"
+# 默认走 jsDelivr（国内可访问）；需要官方 Release 时可覆盖：
+#   RELEASE_BASE_URL=https://github.com/gaowei1012/photo-backup-system/releases/latest/download
+RELEASE_BASE_URL="${RELEASE_BASE_URL:-https://cdn.jsdelivr.net/gh/gaowei1012/photo-backup-system@main}"
 VERSION="${VERSION:-latest}"
 TARBALL_URL="${TARBALL_URL:-}"
 SKIP_DEPS="${SKIP_DEPS:-0}"

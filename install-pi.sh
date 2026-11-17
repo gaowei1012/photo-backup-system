@@ -14,14 +14,14 @@ set -euo pipefail
 
 export INSTALL_DIR="${INSTALL_DIR:-/opt/photobackup}"
 export APP_PORT="${APP_PORT:-13400}"
-export RELEASE_BASE_URL="${RELEASE_BASE_URL:-https://github.com/gaowei1012/photo-backup-system/releases/latest/download}"
+export RELEASE_BASE_URL="${RELEASE_BASE_URL:-https://cdn.jsdelivr.net/gh/gaowei1012/photo-backup-system@main}"
 export WITH_MYSQL="${WITH_MYSQL:-${WITH_POSTGRES:-1}}"
 
 echo "Photo Backup — 树莓派原生安装（无 Docker）"
 echo "建议: Pi 4/5 + 外接磁盘存放相册；系统盘可用 microSD"
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]:-$0}")" 2>/dev/null && pwd || true)"
-RAW_BASE_URL="${RAW_BASE_URL:-https://raw.githubusercontent.com/gaowei1012/photo-backup-system/main}"
+RAW_BASE_URL="${RAW_BASE_URL:-https://cdn.jsdelivr.net/gh/gaowei1012/photo-backup-system@main}"
 
 if [ -n "${SCRIPT_DIR}" ] && [ -f "${SCRIPT_DIR}/install.sh" ]; then
   exec bash "${SCRIPT_DIR}/install.sh" "$@"

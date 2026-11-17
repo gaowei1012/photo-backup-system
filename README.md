@@ -35,10 +35,13 @@ systemd 服务名：`photobackup`
 
 在目标 Linux 机器上执行（需 root / sudo）：
 
+> **重要：** 国内机器直连 `github.com` / `raw.githubusercontent.com` 经常**无输出卡住**。  
+> 安装脚本默认已改为通过 **jsDelivr** 拉取本仓库文件。
+
 ```bash
-# 通用 Linux（脚本与发布包均来自本仓库）
+# 通用 Linux（推荐，国内可下）
 curl -fsSL -o install.sh \
-  https://raw.githubusercontent.com/gaowei1012/photo-backup-system/main/install.sh
+  https://cdn.jsdelivr.net/gh/gaowei1012/photo-backup-system@main/install.sh
 sudo bash install.sh
 ```
 
@@ -46,20 +49,25 @@ sudo bash install.sh
 
 ```bash
 curl -fsSL -o install-pi.sh \
-  https://raw.githubusercontent.com/gaowei1012/photo-backup-system/main/install-pi.sh
+  https://cdn.jsdelivr.net/gh/gaowei1012/photo-backup-system@main/install-pi.sh
 sudo bash install-pi.sh
 ```
 
-指定某个包地址：
+指定架构包（可选）：
 
 ```bash
-TARBALL_URL=https://github.com/gaowei1012/photo-backup-system/releases/download/v1.0.0/photobackup-linux-arm64.tar.gz \
+TARBALL_URL=https://cdn.jsdelivr.net/gh/gaowei1012/photo-backup-system@main/photobackup-linux-arm64.tar.gz \
   sudo bash install.sh
 ```
 
-若 GitHub raw 仍不稳定，可从本机拷贝脚本到服务器后再执行（见下方「离线安装」）。
+备用镜像（jsDelivr 不可用时）：
 
-> 注意：源码在私有 GitLab，**不要**再使用 `raw.githubusercontent.com/ouistudio/...`（会 404）。
+```bash
+curl -fsSL -o install.sh \
+  https://ghfast.top/https://raw.githubusercontent.com/gaowei1012/photo-backup-system/main/install.sh
+RELEASE_BASE_URL=https://ghfast.top/https://github.com/gaowei1012/photo-backup-system/releases/latest/download \
+  sudo bash install.sh
+```
 
 安装脚本会：检测架构 → 安装依赖（MySQL/MariaDB、ffmpeg 等）→ 解压到 `/opt/photobackup` → 生成 `.env` → 注册并启动 systemd。
 
